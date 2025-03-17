@@ -6,14 +6,18 @@ export default function Home() {
   const [balance, setBalance] = useState<number | null>(null);
   const [transactions, setTransactions] = useState<{ amount: number; id: string }[]>([]);
   const [amount, setAmount] = useState<number>(0);
+  const [userId, setUserId] = useState<string>("");
 
   useEffect(() => {
-    fetchBalance();
-  }, []);
+    if (userId) {
+      fetchBalance();
+    }
+  }, [userId]);
 
   const fetchBalance = async () => {
+    if (!userId) return;
     try {
-      const data = await getBalance();
+      const data = await getBalance(userId);
       setBalance(data.balance);
       setTransactions(data.transactions);
     } catch (error) {
@@ -22,14 +26,27 @@ export default function Home() {
   };
 
   const handleTransaction = async (transactionAmount: number) => {
-    await sendTransaction(transactionAmount);
-    fetchBalance(); // Refresh UI after transaction
+    if (!userId) {
+      alert("Please enter a User ID first");
+      return;
+    }
+    await sendTransaction(transactionAmount, userId);
+    fetchBalance(); 
   };
 
   return (
     <div style={{ maxWidth: "400px", margin: "auto", textAlign: "center", padding: "20px" }}>
       <h1>Bank Account</h1>
-      <h2>Balance: {balance !== null ? `$${balance}` : "Loading..."}</h2>
+      
+      <input
+        type="text"
+        value={userId}
+        onChange={(e) => setUserId(e.target.value)}
+        placeholder="Enter User ID"
+        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+      />
+
+      <h2>Balance: {balance !== null ? `$${balance}` : userId ? "Loading..." : "Enter User ID"}</h2>
 
       <input
         type="number"
