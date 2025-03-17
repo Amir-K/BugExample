@@ -47,80 +47,201 @@ export default function Home() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", textAlign: "center", padding: "20px" }}>
-      <h1>Bank Account</h1>
+    <div style={{ 
+      maxWidth: "500px", 
+      margin: "40px auto",
+      padding: "30px",
+      backgroundColor: "#ffffff",
+      borderRadius: "16px",
+      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+    }}>
+      <h1 style={{ 
+        color: "#2D3748", 
+        fontSize: "28px",
+        marginBottom: "30px",
+        fontWeight: "600"
+      }}>Bank Account</h1>
       
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div style={{ 
+        display: "flex", 
+        gap: "12px", 
+        marginBottom: "30px",
+        backgroundColor: "#F7FAFC",
+        padding: "16px",
+        borderRadius: "12px"
+      }}>
         <input
           type="text"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
           placeholder="Enter User ID"
-          style={{ flex: 1, padding: "10px" }}
+          style={{ 
+            flex: 1, 
+            padding: "12px 16px",
+            border: "1px solid #E2E8F0",
+            borderRadius: "8px",
+            fontSize: "16px",
+            outline: "none",
+            transition: "border-color 0.2s"
+          }}
         />
         <button
           onClick={fetchBalance}
           disabled={isLoading}
           style={{ 
-            padding: "10px 20px",
-            backgroundColor: "#4CAF50",
+            padding: "12px 24px",
+            backgroundColor: "#63B3ED",
             color: "white",
             border: "none",
-            borderRadius: "4px",
+            borderRadius: "8px",
             cursor: isLoading ? "not-allowed" : "pointer",
-            opacity: isLoading ? 0.7 : 1
+            opacity: isLoading ? 0.7 : 1,
+            fontSize: "16px",
+            fontWeight: "500",
+            transition: "transform 0.1s, opacity 0.2s",
+            transform: isLoading ? "scale(0.98)" : "scale(1)"
           }}
         >
           {isLoading ? "Loading..." : "Load Account"}
         </button>
       </div>
 
-      <h2>Balance: {balance !== null ? `$${balance}` : "No account loaded"}</h2>
+      <div style={{
+        backgroundColor: "#EBF8FF",
+        padding: "20px",
+        borderRadius: "12px",
+        marginBottom: "30px"
+      }}>
+        <h2 style={{ 
+          color: "#2B6CB0",
+          fontSize: "24px",
+          margin: "0",
+          fontWeight: "600"
+        }}>
+          Balance: {balance !== null ? `$${balance.toLocaleString()}` : "No account loaded"}
+        </h2>
+      </div>
 
-      <input
-        type="number"
-        value={amount}
-        onChange={(e) => setAmount(Number(e.target.value))}
-        placeholder="Enter amount"
-        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-        disabled={isLoading || balance === null}
-      />
+      <div style={{
+        backgroundColor: "#F7FAFC",
+        padding: "20px",
+        borderRadius: "12px",
+        marginBottom: "20px"
+      }}>
+        <input
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
+          placeholder="Enter amount"
+          style={{ 
+            width: "100%", 
+            padding: "12px 16px",
+            border: "1px solid #E2E8F0",
+            borderRadius: "8px",
+            fontSize: "16px",
+            marginBottom: "16px",
+            outline: "none",
+            transition: "border-color 0.2s"
+          }}
+          disabled={isLoading || balance === null}
+        />
 
-      <button
-        onClick={() => handleTransaction(amount)}
-        style={{ 
-          padding: "10px", 
-          marginRight: "5px", 
-          cursor: isLoading || balance === null ? "not-allowed" : "pointer",
-          opacity: isLoading || balance === null ? 0.7 : 1
-        }}
-        disabled={isLoading || balance === null}
-      >
-        Deposit
-      </button>
+        <div style={{ display: "flex", gap: "12px" }}>
+          <button
+            onClick={() => handleTransaction(amount)}
+            style={{ 
+              flex: 1,
+              padding: "12px", 
+              backgroundColor: "#9AE6B4",
+              color: "#276749",
+              border: "none",
+              borderRadius: "8px",
+              cursor: isLoading || balance === null ? "not-allowed" : "pointer",
+              opacity: isLoading || balance === null ? 0.7 : 1,
+              fontSize: "16px",
+              fontWeight: "500",
+              transition: "transform 0.1s",
+              transform: isLoading ? "scale(0.98)" : "scale(1)"
+            }}
+            disabled={isLoading || balance === null}
+          >
+            Deposit
+          </button>
 
-      <button
-        onClick={() => handleTransaction(-amount)}
-        style={{ 
-          padding: "10px", 
-          cursor: isLoading || balance === null ? "not-allowed" : "pointer",
-          backgroundColor: "red", 
-          color: "white",
-          opacity: isLoading || balance === null ? 0.7 : 1
-        }}
-        disabled={isLoading || balance === null}
-      >
-        Withdraw
-      </button>
+          <button
+            onClick={() => handleTransaction(-amount)}
+            style={{ 
+              flex: 1,
+              padding: "12px",
+              backgroundColor: "#FED7D7",
+              color: "#9B2C2C",
+              border: "none",
+              borderRadius: "8px",
+              cursor: isLoading || balance === null ? "not-allowed" : "pointer",
+              opacity: isLoading || balance === null ? 0.7 : 1,
+              fontSize: "16px",
+              fontWeight: "500",
+              transition: "transform 0.1s",
+              transform: isLoading ? "scale(0.98)" : "scale(1)"
+            }}
+            disabled={isLoading || balance === null}
+          >
+            Withdraw
+          </button>
+        </div>
+      </div>
 
-      <h3>Transaction History</h3>
-      <ul style={{ textAlign: "left", padding: "10px", background: "#f9f9f9", borderRadius: "5px" }}>
-        {transactions.map((txn, idx) => (
-          <li key={idx} style={{ marginBottom: "5px" }}>
-            {txn.amount > 0 ? "Deposit" : "Withdrawal"} of ${Math.abs(txn.amount)}
-          </li>
-        ))}
-      </ul>
+      <div style={{
+        backgroundColor: "#F7FAFC",
+        borderRadius: "12px",
+        overflow: "hidden"
+      }}>
+        <h3 style={{ 
+          margin: "0",
+          padding: "16px 20px",
+          backgroundColor: "#EDF2F7",
+          color: "#4A5568",
+          fontSize: "18px",
+          fontWeight: "600"
+        }}>Transaction History</h3>
+        <ul style={{ 
+          margin: "0",
+          padding: "16px 20px",
+          listStyle: "none"
+        }}>
+          {transactions.map((txn, idx) => (
+            <li key={idx} style={{ 
+              padding: "12px 0",
+              borderBottom: idx === transactions.length - 1 ? "none" : "1px solid #E2E8F0",
+              color: "#4A5568",
+              fontSize: "16px",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center"
+            }}>
+              <span style={{
+                color: txn.amount > 0 ? "#276749" : "#9B2C2C",
+                fontWeight: "500"
+              }}>
+                {txn.amount > 0 ? "Deposit" : "Withdrawal"}
+              </span>
+              <span style={{ fontWeight: "600" }}>
+                ${Math.abs(txn.amount).toLocaleString()}
+              </span>
+            </li>
+          ))}
+          {transactions.length === 0 && (
+            <li style={{ 
+              padding: "20px 0",
+              textAlign: "center",
+              color: "#A0AEC0"
+            }}>
+              No transactions yet
+            </li>
+          )}
+        </ul>
+      </div>
     </div>
   );
 }
