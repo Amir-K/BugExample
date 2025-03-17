@@ -7,21 +7,24 @@ export default function Home() {
   const [transactions, setTransactions] = useState<{ amount: number; id: string }[]>([]);
   const [amount, setAmount] = useState<number>(0);
   const [userId, setUserId] = useState<string>("");
-
-  useEffect(() => {
-    if (userId) {
-      fetchBalance();
-    }
-  }, [userId]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchBalance = async () => {
-    if (!userId) return;
+    if (!userId) {
+      alert("Please enter a User ID first");
+      return;
+    }
+    
+    setIsLoading(true);
     try {
       const data = await getBalance(userId);
       setBalance(data.balance);
       setTransactions(data.transactions);
     } catch (error) {
       console.error("Error fetching balance:", error);
+      alert("Error loading account. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -30,23 +33,49 @@ export default function Home() {
       alert("Please enter a User ID first");
       return;
     }
-    await sendTransaction(transactionAmount, userId);
-    fetchBalance(); 
+    
+    setIsLoading(true);
+    try {
+      await sendTransaction(transactionAmount, userId);
+      fetchBalance();
+    } catch (error) {
+      console.error("Error processing transaction:", error);
+      alert("Error processing transaction. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div style={{ maxWidth: "400px", margin: "auto", textAlign: "center", padding: "20px" }}>
       <h1>Bank Account</h1>
       
-      <input
-        type="text"
-        value={userId}
-        onChange={(e) => setUserId(e.target.value)}
-        placeholder="Enter User ID"
-        style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
-      />
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        <input
+          type="text"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+          placeholder="Enter User ID"
+          style={{ flex: 1, padding: "10px" }}
+        />
+        <button
+          onClick={fetchBalance}
+          disabled={isLoading}
+          style={{ 
+            padding: "10px 20px",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: isLoading ? "not-allowed" : "pointer",
+            opacity: isLoading ? 0.7 : 1
+          }}
+        >
+          {isLoading ? "Loading..." : "Load Account"}
+        </button>
+      </div>
 
-      <h2>Balance: {balance !== null ? `$${balance}` : userId ? "Loading..." : "Enter User ID"}</h2>
+      <h2>Balance: {balance !== null ? `$${balance}` : "No account loaded"}</h2>
 
       <input
         type="number"
@@ -54,18 +83,32 @@ export default function Home() {
         onChange={(e) => setAmount(Number(e.target.value))}
         placeholder="Enter amount"
         style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
+        disabled={isLoading || balance === null}
       />
 
       <button
         onClick={() => handleTransaction(amount)}
-        style={{ padding: "10px", marginRight: "5px", cursor: "pointer" }}
+        style={{ 
+          padding: "10px", 
+          marginRight: "5px", 
+          cursor: isLoading || balance === null ? "not-allowed" : "pointer",
+          opacity: isLoading || balance === null ? 0.7 : 1
+        }}
+        disabled={isLoading || balance === null}
       >
         Deposit
       </button>
 
       <button
         onClick={() => handleTransaction(-amount)}
-        style={{ padding: "10px", cursor: "pointer", backgroundColor: "red", color: "white" }}
+        style={{ 
+          padding: "10px", 
+          cursor: isLoading || balance === null ? "not-allowed" : "pointer",
+          backgroundColor: "red", 
+          color: "white",
+          opacity: isLoading || balance === null ? 0.7 : 1
+        }}
+        disabled={isLoading || balance === null}
       >
         Withdraw
       </button>
