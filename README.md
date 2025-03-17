@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Bank Account Application
 
-## Getting Started
+A simple bank account application with Express backend and vanilla JavaScript frontend.
 
-First, run the development server:
+## Features
 
+- User account management with unique user IDs
+- Deposit and withdrawal functionality
+- Transaction history
+- Balance tracking
+- Input validation
+- Error handling
+- Responsive UI
+
+## Setup
+
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Start the server:
+```bash
+npm start
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Open your browser and navigate to:
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technical Details
 
-## Learn More
+- Backend: Express.js
+- Frontend: Vanilla JavaScript, HTML, CSS
+- Data Storage: In-memory (Map object)
+- API Endpoints:
+  - GET /api/balance?userId={userId} - Get account balance and transactions
+  - POST /api/balance - Process transaction (deposit/withdrawal)
 
-To learn more about Next.js, take a look at the following resources:
+## Notes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Data is stored in memory and will be lost when the server restarts
+- Each user can have up to 10 most recent transactions
+- Withdrawals are prevented if the amount exceeds the current balance
