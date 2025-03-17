@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const app = express();
-const port = 5000;
+const port = 3000;
 
 const EXTERNAL_API_URL = process.env.NODE_ENV === "production" 
     ? "https://buggyapi.onrender.com/balance" 
