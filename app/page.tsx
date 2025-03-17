@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { sendTransaction, getBalance } from "../lib/api";
 
 export default function Home() {
