@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-import { sendTransaction, getBalance } from "../lib/api";
+import { getBalance, sendTransaction } from "./lib/api";
 
 export default function Home() {
   const [balance, setBalance] = useState<number | null>(null);
